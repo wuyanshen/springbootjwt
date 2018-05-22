@@ -1,9 +1,11 @@
 package com.jwt.study.security_jwt.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwt.study.security_jwt.entity.MyUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,14 +22,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+@Component
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
 
-    public JwtLoginFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+    /*@Autowired
+    public JwtLoginFilter(AuthenticationManager authManager) {
+        setAuthenticationManager(authManager);
+    }*/
+
+
     /**
      * 接收并解析用户凭证
      * @param request
@@ -36,11 +45,9 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
      * @throws AuthenticationException
      */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest req,
-                                                HttpServletResponse res) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request,HttpServletResponse response) throws AuthenticationException {
         try {
-            MyUser user = new ObjectMapper()
-                    .readValue(req.getInputStream(), MyUser.class);
+            MyUser user = new ObjectMapper().readValue(request.getInputStream(), MyUser.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -69,6 +76,27 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .setExpiration(new Date(System.currentTimeMillis()+ 60 * 60 * 24 * 1000))
                 .signWith(SignatureAlgorithm.HS512,"MyJwtSecret")
                 .compact();
-        response.addHeader("Authorization","Bearer "+token);
+
+        //写入Header
+        //response.addHeader("Authorization","Bearer "+token);
+
+        //写入Body
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
+        Map<String,Object> map = new HashMap<>();
+        map.put("token","Bearer "+token);
+        response.getOutputStream().println(JSON.toJSONString(map));
+    }
+
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        Map<String,Object> map = new HashMap<>();
+        map.put("status","500");
+        map.put("message","Internal Server Error!!!");
+        map.put("result",null);
+        response.getOutputStream().println(JSON.toJSONString(map));
     }
 }

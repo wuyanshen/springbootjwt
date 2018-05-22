@@ -15,10 +15,6 @@ public class SecurityJwtApplication {
 		SpringApplication.run(SecurityJwtApplication.class, args);
 	}
 
-	//注册BCryptPasswordEncoder类
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
+
 
 }
