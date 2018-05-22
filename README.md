@@ -11,4 +11,7 @@
 ## 三、运行项目
     cd security_jwt
     mvn spring-boot:run -D maven.test.skip=true
+
+## 四、参考地址
+   [用JWT技术为SpringBoot的API增加授权保护](https://blog.csdn.net/haiyan_qi/article/details/77373900)
     
