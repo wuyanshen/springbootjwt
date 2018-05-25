@@ -1,7 +1,7 @@
 # 诱人的JWT
 ## 一、新建springboot项目
     主要依赖：
-    h2、security、web、jpa
+    h2、security、web、jpa、JWT(Json Web Token)、swagger2
 ## 二、新建Git项目
     git init .
     git add .
@@ -34,4 +34,4 @@
 
 ## 四、参考地址
    [用JWT技术为SpringBoot的API增加授权保护](https://blog.csdn.net/haiyan_qi/article/details/77373900)
-    
+   [Swagger2 JWT 整合增加token输入](https://blog.csdn.net/smilecall/article/details/79726835) 

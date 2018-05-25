@@ -47,12 +47,17 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,HttpServletResponse response) throws AuthenticationException {
         try {
-            MyUser user = new ObjectMapper().readValue(request.getInputStream(), MyUser.class);
+//            MyUser user = new ObjectMapper().readValue(request.getInputStream(), MyUser.class);
+            MyUser user = JSON.parseObject(request.getInputStream(), MyUser.class);
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            user.getUsername(),
-                            user.getPassword(),
+                            /*user.getUsername(),
+                            user.getPassword(),*/
+                            username,
+                            password,
                             new ArrayList<>())
             );
         } catch (IOException e) {
