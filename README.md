@@ -35,3 +35,4 @@
 ## 四、参考地址
    [用JWT技术为SpringBoot的API增加授权保护](https://blog.csdn.net/haiyan_qi/article/details/77373900)
    [Swagger2 JWT 整合增加token输入](https://blog.csdn.net/smilecall/article/details/79726835) 
+   [Swagger自定义接口](https://blog.csdn.net/chemphone/article/details/79195687)

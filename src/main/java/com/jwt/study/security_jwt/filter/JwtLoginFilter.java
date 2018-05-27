@@ -49,15 +49,15 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         try {
 //            MyUser user = new ObjectMapper().readValue(request.getInputStream(), MyUser.class);
             MyUser user = JSON.parseObject(request.getInputStream(), MyUser.class);
-            String username = request.getParameter("username");
+           /* String username = request.getParameter("username");
             String password = request.getParameter("password");
-
+*/
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            /*user.getUsername(),
-                            user.getPassword(),*/
-                            username,
-                            password,
+                            user.getUsername(),
+                            user.getPassword(),
+                            /*username,
+                            password,*/
                             new ArrayList<>())
             );
         } catch (IOException e) {
